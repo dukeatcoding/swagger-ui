@@ -81,7 +81,7 @@
       function addApiKeyAuthorization(){
         var key = encodeURIComponent($('#input_apiKey')[0].value);
         if(key && key.trim() != "") {
-            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
+            var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authentication", "Bearer " + key, "header");
             window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
             log("added key " + key);
         }
@@ -90,12 +90,23 @@
       $('#input_apiKey').change(addApiKeyAuthorization);
 
       // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
-      /*
-        var apiKey = "myApiKeyXXXX123456789";
+       // Send the data using post
+  var posting = $.ajax({type: "POST", url: "http://development.pmcorp.de/slimapi/services/models/api/index.php/v1/login", 
+    data :  JSON.stringify({
+      "access_username" :"azehender",
+      "ipxx_onlineid_id" : 105001,
+      "access_password" : "start!AZ1234"
+    }), dataType : "json", contentType:"application/json", });
+     
+  // Put the results in a div
+  posting.done(function( data ) {
+
+        var apiKey = data.token.token_key;
         $('#input_apiKey').val(apiKey);
-      */
 
       window.swaggerUi.load();
+      });      
+
 
       function log() {
         if ('console' in window) {
